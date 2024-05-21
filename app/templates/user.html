@@ -1,1 +1,24 @@
 # User interaction template 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User {{ user_id }}</title>
+</head>
+<body>
+    <h1>User {{ user_id }}</h1>
+    <form method="post">
+        {% for name in names %}
+            <p>{{ name[1] }}
+                <input type="hidden" name="name_id" value="{{ name[0] }}">
+                <select name="response">
+                    <option value="yes">Yes</option>
+                    <option value="maybe">Maybe</option>
+                    <option value="no">No</option>
+                </select>
+                <input type="submit" value="Submit">
+            </p>
+        {% endfor %}
+    </form>
+</body>
+</html>

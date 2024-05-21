@@ -1,1 +1,16 @@
 # Results Template 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+</head>
+<body>
+    <h1>Common Names Liked by Both Users</h1>
+    <ul>
+        {% for name in common_names %}
+            <li>{{ name[0] }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

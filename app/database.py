@@ -33,3 +33,19 @@ def get_common_names():
     common_names = conn.execute(query).fetchall()
     conn.close()
     return common_names
+
+def reset_db():
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute('DROP TABLE IF EXISTS names')
+    c.execute('DROP TABLE IF EXISTS responses')
+    c.execute('''CREATE TABLE names (id INTEGER PRIMARY KEY, name TEXT)''')
+    c.execute('''CREATE TABLE responses (id INTEGER PRIMARY KEY, user_id INTEGER, name_id INTEGER, response TEXT)''')
+    
+    # Insert initial data
+    names = ['Emma', 'Liam', 'Noah', 'Olivia', 'Ava']
+    c.executemany('INSERT INTO names (name) VALUES (?)', [(name,) for name in names])
+    
+    conn.commit()
+    conn.close()
+

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submitted</title>
+</head>
+<body>
+    <h1>Selections Submitted</h1>
+    <p>Thank you for your selections!</p>
+    {% if next_step == 'results' %}
+        <a href="/results">View Results</a>
+    {% else %}
+        <a href="{{ next_step }}">Proceed to User 2</a>
+    {% endif %}
+</body>
+</html>

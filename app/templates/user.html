@@ -9,16 +9,20 @@
     <h1>User {{ user_id }}</h1>
     <form method="post">
         {% for name in names %}
-            <p>{{ name[1] }}
+            <p>
+                {{ name[1] }}
                 <input type="hidden" name="name_id" value="{{ name[0] }}">
-                <select name="response">
+                <select name="response_{{ name[0] }}">
                     <option value="yes">Yes</option>
                     <option value="maybe">Maybe</option>
                     <option value="no">No</option>
                 </select>
-                <input type="submit" value="Submit">
             </p>
         {% endfor %}
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>
+
+
+

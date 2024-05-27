@@ -28,8 +28,8 @@ The Baby Name Match Game is a web application that allows two users to independe
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/yourrepository.git
-    cd yourrepository
+    git clone https://github.com/D3jag0re/baby-name-match-game.git
+    cd <your_repository>
     ```
 
 2. Set up a virtual environment:

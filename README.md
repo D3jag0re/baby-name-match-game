@@ -15,8 +15,8 @@ The Baby Name Match Game is a web application that allows two users to independe
 
 ## Stack
 
-* <u>Frontend:</u> HTML, CSS
-* <u>Backend:</u> Flask (Python)
+* **Frontend:** HTML, CSS
+* <ins>Backend:</ins> Flask (Python)
 * <u>Database:</u> SQLite
 * <u>Server:</u> Gunicorn (for deployment)
 * <u>Infrastructure:</u> Terraform, Azure App Service

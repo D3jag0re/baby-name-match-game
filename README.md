@@ -4,6 +4,8 @@
 
 The Baby Name Match Game is a web application that allows two users to independently select their preferences ("yes", "maybe", "no") for a list of baby names. At the end of the selection process, the application displays the names that both users selected as "yes" or "maybe".
 
+This is a simple app created to demonstrate automated deployments and CI/CD. 
+
 ## Workflow of the App
 
 1. User 1 makes their selections for the list of names and submits their choices.

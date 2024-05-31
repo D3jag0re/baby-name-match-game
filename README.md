@@ -81,6 +81,19 @@ This is a simple app created to demonstrate automated deployments and CI/CD.
 
 ### Steps
 
-* Clone / Secrets 
-* Blank
-* Blank 
+1. Clone the Repo 
+
+2. Add the following secrets to your GitHub repository:
+    * ARM_CLIENT_ID: Your Azure service principal client ID.
+    * ARM_CLIENT_SECRET: Your Azure service principal client secret.
+    * ARM_SUBSCRIPTION_ID: Your Azure subscription ID.
+    * ARM_TENANT_ID: Your Azure tenant ID.
+    * AZURE_STORAGE_ACCOUNT: The name of your Azure Storage Account.
+    * AZURE_STORAGE_CONTAINER: The name of your Azure Storage Container.
+    * AZURE_PUBLISH_PROFILE: The publish profile of your Azure App Service.
+
+3. Commit and Push changes - to trigger the GitHub Actions workflow
+
+4. Monitor the Deployment
+
+5. Access the Application 

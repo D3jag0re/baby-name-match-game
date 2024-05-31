@@ -1,0 +1,8 @@
+provider
+
+RG
+ASP
+APPSRV
+Storage Acc/ Container / Blob 
+
+output default hostname 

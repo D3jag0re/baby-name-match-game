@@ -1,14 +1,66 @@
 name: Deploy to Azure App Service
 
 on:
-    push:
-      branches:
-        - tootle 
+  push:
+    branches:
+      - deploy
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-          
-        steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        . venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Zip the application
+      run: |
+        zip -r app.zip .
+
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform
+
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve
+      working-directory: ./terraform
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+    - name: Retrieve Outputs
+      id: outputs
+      run: echo "AZURE_APP_SERVICE_URL=$(terraform output -raw app_service_default_hostname)" >> $GITHUB_ENV
+      working-directory: ./terraform
+
+    - name: Deploy to Azure Storage
+      uses: azure/cli@v1
+      with:
+        inlineScript: |
+          az storage blob upload --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} --container-name ${{ secrets.AZURE_STORAGE_CONTAINER }} --file app.zip --name app.zip --auth-mode key
+
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'example-app-service'
+        package: './app.zip'
+        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}

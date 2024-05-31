@@ -81,5 +81,6 @@ This is a simple app created to demonstrate automated deployments and CI/CD.
 
 ### Steps
 
+* Clone / Secrets 
 * Blank
 * Blank 

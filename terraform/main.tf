@@ -18,8 +18,10 @@ module "app_service_plan" {
 
 module "app_service_linux" {
     source = "github.com/D3jag0re/tf-modules-azure//appServiceLinux"
-    app_service_name= "ExampleASL"
-    resource_group_name = module.resource_group.rg_name 
+    app_service_name = "ExampleASL"
+    app_service_plan_name = module.app_service_plan.name
+    app_service_plan_rg_name = module.resource_group.rg_name 
+    rg_name = module.resource_group.rg_name 
 }
 
 module "storage_account" {

@@ -3,7 +3,7 @@ name: Deploy to Azure App Service
 on:
   push:
     branches:
-      - deploy
+      - main
 
 jobs:
   build:
@@ -52,15 +52,5 @@ jobs:
       run: echo "AZURE_APP_SERVICE_URL=$(terraform output -raw app_service_default_hostname)" >> $GITHUB_ENV
       working-directory: ./terraform
 
-    - name: Deploy to Azure Storage
-      uses: azure/cli@v1
-      with:
-        inlineScript: |
-          az storage blob upload --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} --container-name ${{ secrets.AZURE_STORAGE_CONTAINER }} --file app.zip --name app.zip --auth-mode key
 
-    - name: Deploy to Azure App Service
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'example-app-service'
-        package: './app.zip'
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+

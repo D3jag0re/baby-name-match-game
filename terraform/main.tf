@@ -33,7 +33,7 @@ module "storage_account" {
   create_container        = true
   storage_container_names = ["container1"]
 }
-
+/*
 #Adjust for app files and figure out zip in pipeline
 resource "azurerm_storage_blob" "example" {
   name                   = "app.zip"
@@ -42,4 +42,5 @@ resource "azurerm_storage_blob" "example" {
   type                   = "Block"
   source                 = "${path.module}/app.zip"
 }
+*/
 

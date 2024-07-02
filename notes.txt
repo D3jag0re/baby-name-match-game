@@ -19,3 +19,8 @@ output default hostname
         app-name: 'example-app-service'
         package: './app.zip'
         publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+
+
+
+
+more notes: 

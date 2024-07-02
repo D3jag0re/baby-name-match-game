@@ -28,7 +28,7 @@ module "app_service_linux" {
 
 module "storage_account" {
   source                  = "github.com/D3jag0re/tf-modules-azure//storage"
-  storage_acc_name        = "examplestorageacc"
+  storage_acc_name        = "examplestorageacc857463532"
   storage_acc_rg_name     = module.resource_group.rg_name
   create_container        = true
   storage_container_names = ["container1"]

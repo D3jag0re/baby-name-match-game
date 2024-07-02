@@ -14,6 +14,7 @@ module "app_service_plan" {
   service_plan_name = "ExampleASP"
   rg_name           = module.resource_group.rg_name
   sku               = "F1"
+  depends_on = [ module.resource_group ]
 }
 
 module "app_service_linux" {

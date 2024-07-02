@@ -1,6 +1,6 @@
 
 module "resource_group" {
-  source = "https://github.com/D3jag0re/tf-modules-azure//resourceGroup"
+  source = "github.com/D3jag0re/tf-modules-azure//resourceGroup"
   rg_name = "Example"
   rg_location = "can-east"
   tags = {
@@ -10,20 +10,20 @@ module "resource_group" {
 }
 
 module "app_service_plan" {
-    source = "https://github.com/D3jag0re/tf-modules-azure//appServicePlan"
+    source = "github.com/D3jag0re/tf-modules-azure//appServicePlan"
     service_plan_name= "ExampleASP"
     resource_group_name = module.resource_group.rg_name 
     sku = "F1"
 }
 
 module "app_service_linux" {
-    source = "https://github.com/D3jag0re/tf-modules-azure//appServiceLinux"
+    source = "github.com/D3jag0re/tf-modules-azure//appServiceLinux"
     app_service_name= "ExampleASL"
     resource_group_name = module.resource_group.rg_name 
 }
 
 module "storage_account" {
-    source = "https://github.com/D3jag0re/tf-modules-azure//storage"
+    source = "github.com/D3jag0re/tf-modules-azure//storage"
     storage_acc_name= "ExampleStorageacc"
     storage_acc_rg_name = module.resource_group.rg_name 
     create_container = true 

@@ -1,8 +1,8 @@
 
 module "resource_group" {
   source      = "github.com/D3jag0re/tf-modules-azure//resourceGroup"
-  rg_name     = "Example"
-  rg_location = "can-east"
+  rg_name     = "ExampleRG"
+  rg_location = local.location 
   tags = {
     createdBy = "me"
     purpose   = "testing"
@@ -26,7 +26,7 @@ module "app_service_linux" {
 
 module "storage_account" {
   source                  = "github.com/D3jag0re/tf-modules-azure//storage"
-  storage_acc_name        = "ExampleStorageacc"
+  storage_acc_name        = "examplestorageacc"
   storage_acc_rg_name     = module.resource_group.rg_name
   create_container        = true
   storage_container_names = ["container1"]

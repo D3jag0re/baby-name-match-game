@@ -21,6 +21,7 @@ module "app_service_linux" {
   source                   = "github.com/D3jag0re/tf-modules-azure//appServiceLinux"
   app_service_name         = "ExampleASL"
   app_service_plan_name    = module.app_service_plan.service_plan_name
+  app_service_plan_id = module.app_service_plan.service_plan_id 
   app_service_plan_rg_name = module.resource_group.rg_name
   rg_name                  = module.resource_group.rg_name
 }

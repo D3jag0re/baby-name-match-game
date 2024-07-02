@@ -32,6 +32,7 @@ module "storage_account" {
   storage_acc_rg_name     = module.resource_group.rg_name
   create_container        = true
   storage_container_names = ["container1"]
+  depends_on = [ module.resource_group ]
 }
 /*
 #Adjust for app files and figure out zip in pipeline

@@ -57,14 +57,7 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
-    - name: Retrieve Outputs
-      id: outputs
-      run: |
-        echo "Running terraform output command..."
-        hostname=$(terraform output -raw app_service_default_hostname 2>&1)
-        echo "Raw output: ${hostname}"
-        echo "AZURE_APP_SERVICE_URL=${hostname}" >> $GITHUB_ENV
-      working-directory: ./terraform
+
       
 
     - name: Deploy to Azure Storage

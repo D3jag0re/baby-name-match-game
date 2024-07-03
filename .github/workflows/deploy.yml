@@ -69,6 +69,11 @@ jobs:
         echo "STORAGE_CONTAINER_NAME=${storage_container_name}" >> $GITHUB_ENV
         echo "APP_SERVICE_NAME=${app_service_name}" >> $GITHUB_ENV
       working-directory: ./terraform
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
     - name: Deploy to Azure Storage
       uses: azure/cli@v1

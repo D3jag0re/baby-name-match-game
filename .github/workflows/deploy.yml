@@ -66,9 +66,10 @@ jobs:
     - name: Retrieve Outputs
       id: outputs
       run: |
+        terraform output
         echo "STORAGE_ACCOUNT_NAME=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
         echo "STORAGE_CONTAINER_NAME=$(terraform output -raw storage_account_container_name)" >> $GITHUB_OUTPUT
-        echo ${{ steps.outputs.STORAGE_ACCOUNT_NAME }}
+        echo $STORAGE_ACCOUNT_NAME
         echo ${{ steps.outputs.STORAGE_CONTAINER_NAME }}
       working-directory: ./terraform
       env:

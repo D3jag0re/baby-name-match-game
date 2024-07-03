@@ -19,3 +19,5 @@ provider "azurerm" {
   use_oidc = true 
   features {}
 }
+
+data "azurerm_client_config" "current" {}

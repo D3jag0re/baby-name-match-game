@@ -67,10 +67,17 @@ jobs:
       id: outputs
       run: |
         terraform output
-        echo "STORAGE_ACCOUNT_NAME=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
-        echo "STORAGE_CONTAINER_NAME=$(terraform output -raw storage_account_container_name)" >> $GITHUB_OUTPUT
-        echo "the var is $STORAGE_ACCOUNT_NAME"
-        echo "the var is also ${{ steps.outputs.STORAGE_CONTAINER_NAME }}"
+        terraform output -raw storage_account_name
+        terraform output -raw storage_account_container_name
+        echo "Running terraform output command..."
+        storage_account_name=$(terraform output -raw storage_account_name)
+        storage_container_name=$(terraform output -raw storage_account_container_name)
+        app_service_name=$(terraform output -raw app_service_name)
+        echo "STORAGE_ACCOUNT_NAME=${storage_account_name}" >> $GITHUB_ENV
+        echo "STORAGE_CONTAINER_NAME=${storage_container_name}" >> $GITHUB_ENV
+        echo "APP_SERVICE_NAME=${app_service_name}" >> $GITHUB_ENV
+        echo "var is $STORAGE_ACCOUNT_NAME"
+        echo "var is $STORAGE_CONTAINER_NAME"
       working-directory: ./terraform
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}

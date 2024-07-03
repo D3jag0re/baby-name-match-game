@@ -96,7 +96,7 @@ jobs:
       uses: azure/cli@v1
       with:
         inlineScript: |
-          az storage blob upload --account-name $STORAGE_ACCOUNT_NAME --container-name $STORAGE_CONTAINER_NAME --file app.zip --name app.zip --auth-mode key
+          az storage blob upload --account-name $STORAGE_ACCOUNT_NAME --container-name $STORAGE_CONTAINER_NAME --file app.zip --name app.zip --auth-mode key --overwrite 
 
     - name: Deploy to Azure App Service
       uses: azure/webapps-deploy@v2

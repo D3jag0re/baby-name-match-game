@@ -78,6 +78,7 @@ jobs:
         echo "APP_SERVICE_NAME=${app_service_name}" >> $GITHUB_ENV
         echo "var is $STORAGE_ACCOUNT_NAME"
         echo "var is $STORAGE_CONTAINER_NAME"
+        echo "var is $storage_account_name"
       working-directory: ./terraform
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -85,18 +86,6 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
-    - name: Deploy to Azure Storage
-      uses: azure/cli@v1
-      with:
-        inlineScript: |
-         az storage blob upload --account-name ${{ steps.outputs.STORAGE_ACCOUNT_NAME }} --container-name ${{ steps.outputs.STORAGE_CONTAINER_NAME }} --file app.zip --name app.zip --auth-mode key
-
-    - name: Deploy to Azure App Service
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: $APP_SERVICE_NAME
-        package: './app.zip'
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
 
 
 

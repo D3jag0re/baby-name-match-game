@@ -58,18 +58,28 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
 
-      
+    - name: Retrieve Outputs
+      id: outputs
+      run: |
+        terraform output 
+        storage_account_name=$(terraform output -raw storage_account_name)
+        storage_container_name=$(terraform output -raw storage_container_name)
+        app_service_name=$(terraform output -raw app_service_name)
+        echo "STORAGE_ACCOUNT_NAME=${storage_account_name}" >> $GITHUB_ENV
+        echo "STORAGE_CONTAINER_NAME=${storage_container_name}" >> $GITHUB_ENV
+        echo "APP_SERVICE_NAME=${app_service_name}" >> $GITHUB_ENV
+      working-directory: ./terraform
 
     - name: Deploy to Azure Storage
       uses: azure/cli@v1
       with:
         inlineScript: |
-          az storage blob upload --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} --container-name ${{ secrets.AZURE_STORAGE_CONTAINER }} --file app.zip --name app.zip --auth-mode key
+         az storage blob upload --account-name $STORAGE_ACCOUNT_NAME --container-name $STORAGE_CONTAINER_NAME --file app.zip --name app.zip --auth-mode key
 
     - name: Deploy to Azure App Service
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'example-app-service'
+        app-name: $APP_SERVICE_NAME
         package: './app.zip'
         publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
 

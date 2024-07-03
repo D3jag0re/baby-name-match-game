@@ -10,11 +10,13 @@ terraform {
     storage_account_name = "tfstatecacestorage"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
+    use_oidc = true
   }
 }
 
 
 provider "azurerm" {
-  #skip_provider_registration = true 
+  #skip_provider_registration = true
+  use_oidc = true 
   features {}
 }

@@ -32,6 +32,11 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: 1.0.0
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: false
     
     - name: Azure Login
       uses: azure/login@v1
@@ -61,13 +66,8 @@ jobs:
     - name: Retrieve Outputs
       id: outputs
       run: |
-        terraform output 
-        storage_account_name=$(terraform output -raw storage_account_name)
-        storage_container_name=$(terraform output -raw storage_container_name)
-        app_service_name=$(terraform output -raw app_service_name)
-        echo "STORAGE_ACCOUNT_NAME=${storage_account_name}" >> $GITHUB_ENV
-        echo "STORAGE_CONTAINER_NAME=${storage_container_name}" >> $GITHUB_ENV
-        echo "APP_SERVICE_NAME=${app_service_name}" >> $GITHUB_ENV
+        echo "STORAGE_ACCOUNT_NAME=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
+        echo "STORAGE_CONTAINER_NAME=$(terraform output -raw storage_container_name)" >> $GITHUB_OUTPUT
       working-directory: ./terraform
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -79,7 +79,7 @@ jobs:
       uses: azure/cli@v1
       with:
         inlineScript: |
-         az storage blob upload --account-name $STORAGE_ACCOUNT_NAME --container-name $STORAGE_CONTAINER_NAME --file app.zip --name app.zip --auth-mode key
+         az storage blob upload --account-name ${{ steps.outputs.STORAGE_ACCOUNT_NAME }} --container-name ${{ steps.outputs.STORAGE_CONTAINER_NAME }} --file app.zip --name app.zip --auth-mode key
 
     - name: Deploy to Azure App Service
       uses: azure/webapps-deploy@v2

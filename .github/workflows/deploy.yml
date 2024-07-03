@@ -89,6 +89,12 @@ jobs:
     - name: Debug GITHUB_ENV
       run: |
         cat $GITHUB_ENV
+
+    - name: Verify Environment Variables
+      run: |
+        echo "APP_SERVICE_NAME is $APP_SERVICE_NAME"
+        echo "STORAGE_ACCOUNT_NAME is $STORAGE_ACCOUNT_NAME"
+        echo "STORAGE_CONTAINER_NAME is $STORAGE_CONTAINER_NAME"
       
 
 

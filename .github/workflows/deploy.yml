@@ -106,10 +106,12 @@ jobs:
         az webapp deployment source config-zip --resource-group ExampleRG --name $APP_SERVICE_NAME --src ./app.zip --subscription ${{ secrets.ARM_SUBSCRIPTION_ID }}
     
     - name: Set Startup Command
+      env:
+        APP_SERVICE_NAME: ${{ env.APP_SERVICE_NAME }}    
       uses: azure/cli@v1
       with:
         inlineScript: |
-          az webapp config set --name example-app-service --resource-group ExampleRG --startup-file "gunicorn --bind=0.0.0.0 --timeout 600 --chdir app __init__:app"
+          az webapp config set --name ${{ env.APP_SERVICE_NAME }} --resource-group ExampleRG --startup-file "gunicorn --bind=0.0.0.0 --timeout 600 --chdir app __init__:app"
 
       
 

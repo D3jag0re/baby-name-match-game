@@ -109,7 +109,7 @@ jobs:
       uses: azure/cli@v1
       with:
         inlineScript: |
-          az webapp config set --name example-app-service --resource-group example-resources --startup-file "gunicorn --bind=0.0.0.0 --timeout 600 --chdir app __init__:app"
+          az webapp config set --name example-app-service --resource-group ExampleRG --startup-file "gunicorn --bind=0.0.0.0 --timeout 600 --chdir app __init__:app"
 
       
 

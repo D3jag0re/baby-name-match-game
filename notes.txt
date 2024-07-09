@@ -7,6 +7,15 @@ Storage Acc/ Container / Blob
 
 output default hostname 
 
+    - name: Retrieve Outputs
+      id: outputs
+      run: |
+        echo "Running terraform output command..."
+        hostname=$(terraform output -raw app_service_default_hostname 2>&1)
+        echo "Raw output: ${hostname}"
+        echo "AZURE_APP_SERVICE_URL=${hostname}" >> $GITHUB_ENV
+      working-directory: ./terraform
+
     - name: Deploy to Azure Storage
       uses: azure/cli@v1
       with:
@@ -20,7 +29,12 @@ output default hostname
         package: './app.zip'
         publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
 
-
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: $APP_SERVICE_NAME
+        package: './app.zip'
+        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
 
 
 more notes: ...

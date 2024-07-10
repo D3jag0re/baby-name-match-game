@@ -28,7 +28,7 @@ app = Flask(__name__)
 
 
 
-.
+..
 
 # Call the initialize_db function
 initialize_db()

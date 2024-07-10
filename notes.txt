@@ -7,34 +7,29 @@ Storage Acc/ Container / Blob
 
 output default hostname 
 
-    - name: Retrieve Outputs
-      id: outputs
-      run: |
-        echo "Running terraform output command..."
-        hostname=$(terraform output -raw app_service_default_hostname 2>&1)
-        echo "Raw output: ${hostname}"
-        echo "AZURE_APP_SERVICE_URL=${hostname}" >> $GITHUB_ENV
-      working-directory: ./terraform
+# This is the init file without the debugging steps 
+# Initialize the flask app
+#from flask import Flask
 
-    - name: Deploy to Azure Storage
-      uses: azure/cli@v1
-      with:
-        inlineScript: |
-          az storage blob upload --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} --container-name ${{ secrets.AZURE_STORAGE_CONTAINER }} --file app.zip --name app.zip --auth-mode key
+#app = Flask(__name__)
 
-    - name: Deploy to Azure App Service
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'example-app-service'
-        package: './app.zip'
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+#from app import main
+##############################
 
-    - name: Deploy to Azure App Service
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: $APP_SERVICE_NAME
-        package: './app.zip'
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+# Initialize the flask app
+from flask import Flask
+import os
+import sys
+
+# Import the initialize_db function
+from app.initialize_db import initialize_db
+
+app = Flask(__name__)
+
+# Call the initialize_db function
+initialize_db()
+
+from app import main
 
 
 more notes: .....

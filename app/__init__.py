@@ -1,25 +1,27 @@
-# Initialize the flask app
-#from flask import Flask
-
-#app = Flask(__name__)
-
-#from app import main
-##############################
-
-# Initialize the flask app
-from flask import Flask
+import logging
+from logging.handlers import RotatingFileHandler
 import os
-import sys
-
-# Ensure the parent directory is in the path so initialize_db can be imported
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-# Import the initialize_db function
-from initialize_db import initialize_db
+from flask import Flask
 
 app = Flask(__name__)
 
-# Call the initialize_db function
+# Configure logging
+if not app.debug:
+    if not os.path.exists('logs'):
+        os.mkdir('logs')
+    file_handler = RotatingFileHandler('logs/app.log', maxBytes=10240, backupCount=10)
+    file_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    ))
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('App startup')
+
+# Initialize the database
+from app.initialize_db import initialize_db
 initialize_db()
 
 from app import main
+

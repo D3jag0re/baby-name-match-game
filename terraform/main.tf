@@ -2,7 +2,7 @@
 module "resource_group" {
   source      = "github.com/D3jag0re/tf-modules-azure//resourceGroup"
   rg_name     = "ExampleRG"
-  rg_location = local.location 
+  rg_location = local.location
   tags = {
     createdBy = "me"
     purpose   = "testing"
@@ -14,14 +14,14 @@ module "app_service_plan" {
   service_plan_name = "ExampleASP"
   rg_name           = module.resource_group.rg_name
   sku               = "F1"
-  depends_on = [ module.resource_group ]
+  depends_on        = [module.resource_group]
 }
 
 module "app_service_linux" {
   source                   = "github.com/D3jag0re/tf-modules-azure//appServiceLinux"
   app_service_name         = "ExampleASL"
   app_service_plan_name    = module.app_service_plan.service_plan_name
-  app_service_plan_id = module.app_service_plan.service_plan_id 
+  app_service_plan_id      = module.app_service_plan.service_plan_id
   app_service_plan_rg_name = module.resource_group.rg_name
   rg_name                  = module.resource_group.rg_name
 }
@@ -32,8 +32,24 @@ module "storage_account" {
   storage_acc_rg_name     = module.resource_group.rg_name
   create_container        = true
   storage_container_names = ["container1"]
-  depends_on = [ module.resource_group ]
+  depends_on              = [module.resource_group]
 }
+
+module "container_registry" {
+  source              = "github.com/D3jag0re/tf-modules-azure//containerRegistry"
+  resource_group_name = module.resource_group.rg_name
+  location            = local.location
+  registry_name       = "bNameContainerRegistryTest001"
+  sku                 = "Basic"
+  admin_enabled       = false
+
+  tags = {
+    purpose = "test"
+  }
+}
+
+
+
 /*
 #Adjust for app files and figure out zip in pipeline
 resource "azurerm_storage_blob" "example" {

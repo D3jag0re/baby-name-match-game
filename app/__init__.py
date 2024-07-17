@@ -24,4 +24,3 @@ from app.initialize_db import initialize_db
 initialize_db()
 
 from app import main
-

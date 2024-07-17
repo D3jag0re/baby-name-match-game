@@ -1,9 +1,11 @@
-name: Build and Deploy Docker Image to Azure Web App
+# This is a dump of the old deploy.yml file before switching to containerizing 
+
+name: Deploy to Azure App Service
 
 on:
   push:
     branches:
-      - main  
+      - doopdeedoo
 
 jobs:
   build:
@@ -12,6 +14,21 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        . venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Zip the application
+      run: |
+        zip -r app.zip .
 
     - name: Install Terraform
       uses: hashicorp/setup-terraform@v1
@@ -47,86 +64,53 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
+
     - name: Retrieve Outputs
       id: outputs
       run: |
+        terraform output
+
+        echo "Running terraform output command..."
         storage_account_name=$(terraform output -raw storage_account_name)
         storage_container_name=$(terraform output -raw storage_account_container_name)
         app_service_name=$(terraform output -raw app_service_name)
-        resource_group_name=$(terraform output -raw resource_group_name)
-        app_service_plan=$(terraform output -raw app_service_plan)
-        registry_login_server=$(terraform output -raw registry_login_server)
-
         echo "STORAGE_ACCOUNT_NAME=${storage_account_name}" >> $GITHUB_ENV
         echo "STORAGE_CONTAINER_NAME=${storage_container_name}" >> $GITHUB_ENV
         echo "APP_SERVICE_NAME=${app_service_name}" >> $GITHUB_ENV
-        echo "RESOURCE_GROUP_NAME=${resource_group_name}" >> $GITHUB_ENV
-        echo "APP_SERVICE_PLAN=${app_service_plan}" >> $GITHUB_ENV
-        echo "REGISTRY_LOGIN_SERVER=${registry_login_server}" >> $GITHUB_ENV
       working-directory: ./terraform
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-  
+
     - name: Debug GITHUB_ENV
       run: |
         cat $GITHUB_ENV
-  
+
     - name: Verify Environment Variables
       run: |
         echo "APP_SERVICE_NAME is $APP_SERVICE_NAME"
         echo "STORAGE_ACCOUNT_NAME is $STORAGE_ACCOUNT_NAME"
         echo "STORAGE_CONTAINER_NAME is $STORAGE_CONTAINER_NAME"
-        echo "RESOURCE_GROUP_NAME is $RESOURCE_GROUP_NAME"
-        echo "APP_SERVICE_PLAN is $APP_SERVICE_PLAN"
-        echo "REGISTRY_LOGIN_SERVER is $REGISTRY_LOGIN_SERVER"
 
-
-
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Login to Azure Container Registry
-      uses: azure/docker-login@v1
+    - name: Deploy to Azure Storage
+      uses: azure/cli@v1
       with:
-        login-server: ${{ env.REGISTRY_LOGIN_SERVER }}
-        username: ${{ secrets.AZURE_CREDENTIALS }}
-        password: ${{ secrets.AZURE_CREDENTIALS }}
+        inlineScript: |
+          az storage blob upload --account-name $STORAGE_ACCOUNT_NAME --container-name $STORAGE_CONTAINER_NAME --file app.zip --name app.zip --auth-mode key --overwrite 
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: ${{ env.REGISTRY_LOGIN_SERVER }}/flask-app:latest
+    - name: Deploy to Azure App Service
       env:
-        REGISTRY_LOGIN_SERVER: ${{ env.REGISTRY_LOGIN_SERVER }}
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Login to Azure
-      uses: azure/login@v1
+        APP_SERVICE_NAME: ${{ env.APP_SERVICE_NAME }}
+      run: |
+        echo "Deploying to Azure App Service: $APP_SERVICE_NAME"
+        az webapp deployment source config-zip --resource-group ExampleRG --name $APP_SERVICE_NAME --src ./app.zip --subscription ${{ secrets.ARM_SUBSCRIPTION_ID }}
+    
+    - name: Set Startup Command
+      env:
+        APP_SERVICE_NAME: ${{ env.APP_SERVICE_NAME }}    
+      uses: azure/cli@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Create Azure Web App
-      run: |
-        az webapp create \
-          --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-          --plan ${{ env.APP_SERVICE_PLAN }} \
-          --name ${{ env.APP_SERVICE_NAME }} \
-          --deployment-container-image-name ${{ env.REGISTRY_LOGIN_SERVER }}/flask-app:latest
-  
-    - name: Configure Azure Web App
-      run: |
-        az webapp config appsettings set \
-          --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-          --name ${{ env.APP_SERVICE_NAME }} \
-          --settings FLASK_APP=app/__init__.py FLASK_ENV=development
-          
+        inlineScript: |
+          az webapp config set --name ${{ env.APP_SERVICE_NAME }} --resource-group ExampleRG --startup-file "gunicorn --bind=0.0.0.0 --timeout 600 --chdir app __init__:app"

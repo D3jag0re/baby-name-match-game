@@ -5,35 +5,5 @@ ASP
 APPSRV
 Storage Acc/ Container / Blob 
 
-output default hostname 
+For deloy to app service step:  WARNING: This command has been deprecated and will be removed in a future release. Use 'az webapp deploy' instead.
 
-# This is the init file without the debugging steps 
-# Initialize the flask app
-#from flask import Flask
-
-#app = Flask(__name__)
-
-#from app import main
-##############################
-
-# Initialize the flask app
-from flask import Flask
-import os
-import sys
-
-# Import the initialize_db function
-from app.initialize_db import initialize_db
-
-app = Flask(__name__)
-
-
-
-..
-
-# Call the initialize_db function
-initialize_db()
-
-from app import main
-
-
-more notes: .....

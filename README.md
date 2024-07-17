@@ -56,7 +56,7 @@ This is a simple app created to demonstrate automated deployments and CI/CD.
 5. Run the Flask application:
 
     ```bash
-    export FLASK_APP=app/main.py
+    export FLASK_APP=app/__init__.py
     export FLASK_ENV=development
     flask run
     ```
@@ -64,7 +64,7 @@ This is a simple app created to demonstrate automated deployments and CI/CD.
     On Windows:
 
     ```bash
-    set FLASK_APP=app/main.py
+    set FLASK_APP=app/__init__.py
     set FLASK_ENV=development
     flask run
     ```

@@ -1,5 +1,5 @@
 output "resource_group_name" {
-  value = module.resource_group.resource_group.name
+  value = module.resource_group.resource_group.rg_name 
 }
 
 output "storage_account_name" {
@@ -11,7 +11,7 @@ output "storage_account_container_name" {
 }
 
 output "app_service_plan" {
-  value = module.app_service_plan.name
+  value = module.app_service_plan.service_plan_name
 }
 
 output "app_service_name" {
@@ -19,9 +19,9 @@ output "app_service_name" {
 }
 
 output "registry_name" {
-  value = module.container_registry.name
+  value = module.container_registry.registry_name
 }
 
 output "registry_login_server" {
-  value = module.container_registry.login_server
+  value = module.container_registry.registry_login_server
 }

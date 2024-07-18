@@ -26,4 +26,4 @@ EXPOSE 8000
 #CMD ["gunicorn", "--bind=0.0.0.0:8000", "--timeout", "600", "--chdir", "app", "__init__:app"]
 
 #not using gunicorn this works on port 5000
-CMD ["flask", "run", "--host", "0.0.0.0"]
+CMD ["flask", "run", "--host", "0.0.0.0", "--port=8000"]

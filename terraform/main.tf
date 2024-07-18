@@ -24,6 +24,7 @@ module "app_service_linux" {
   app_service_plan_id      = module.app_service_plan.service_plan_id
   app_service_plan_rg_name = module.resource_group.rg_name
   rg_name                  = module.resource_group.rg_name
+  managed_identity_enabled = true 
 }
 
 module "storage_account" {
@@ -48,7 +49,16 @@ module "container_registry" {
   }
 }
 
+########################################
+#                Roles                 # 
+########################################
 
+# This allows the app service to pull the image from container registry 
+resource "azurerm_role_assignment" "kv_secret" {
+  scope                = module.container_registry.container_registry_id
+  role_definition_name = "AcrPull"
+  principal_id         = module.app_service_linux.app_service_managed_identity_principal_id
+}
 
 /*
 #Adjust for app files and figure out zip in pipeline

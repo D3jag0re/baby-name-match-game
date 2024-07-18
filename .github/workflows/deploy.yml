@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs: 
-      RESOURCE_GROUP_NAME: ${{ steps.outputs.outputs.RESOURCE_GROUP_NAME}}
+      RESOURCE_GROUP_NAME: ${{ steps.build.outputs.RESOURCE_GROUP_NAME}}
       
 
     steps:

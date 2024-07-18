@@ -9,3 +9,9 @@ Need to re-do documentation for containers
 
 Add user access admin role for service principal with conditions 
 
+# Current issue is 
+2024-07-18T16:49:19.136Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://bnamecontainerregistrytest001.azurecr.io/v2/flask-app/manifests/be5453804d8e25eb0a9c57400efd879925582265\"
+: unauthorized: authentication required, visit https://aka.ms/acr/authorization for more information."}
+
+Added "acrpull" role to the app service managed identity but still a no-go. 
+

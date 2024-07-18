@@ -25,6 +25,10 @@ module "app_service_linux" {
   app_service_plan_rg_name = module.resource_group.rg_name
   rg_name                  = module.resource_group.rg_name
   managed_identity_enabled = true 
+
+  site_config {
+    container_registry_use_managed_identity = true 
+  }
 }
 
 module "storage_account" {

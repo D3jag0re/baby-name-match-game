@@ -15,3 +15,6 @@ Add user access admin role for service principal with conditions
 
 Added "acrpull" role to the app service managed identity but still a no-go. 
 
+az resource update --ids /subscriptions/<subscription-id>/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/<app-name>/config/web --set properties.acrUseManagedIdentityCreds=True
+
+.

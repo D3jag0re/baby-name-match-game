@@ -128,7 +128,7 @@ jobs:
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'flask-app'
+        app-name: 'ExampleASL'
         images: ${{ env.REGISTRY_LOGIN_SERVER }}/flask-app:${{ github.sha }}
         slot-name: production
         resource-group-name: ${{ env.RESOURCE_GROUP_NAME }}

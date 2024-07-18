@@ -21,11 +21,11 @@ This is a simple app created to demonstrate automated deployments and CI/CD.
 * <ins>Backend:</ins> Flask (Python)
 * <ins>Database:</ins> SQLite
 * <ins>Server:</ins> Gunicorn (for deployment)
-* <ins>Infrastructure:</ins> Terraform, Azure App Service
+* <ins>Infrastructure:</ins> Terraform, Azure App Service, Docker 
 * <ins>CI/CD:</ins> GitHub Actions
 
 
-## To Run Locally for Testing: 
+## To Run Locally (without container) for Testing: 
 
 1. Clone the repository:
 

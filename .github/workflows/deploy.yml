@@ -108,27 +108,27 @@ jobs:
 ###############################################################################
 ###############################################################################
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
+  #deploy:
+  #  needs: build
+  #  runs-on: ubuntu-latest
 
-    steps:
-    - name: Verify Environment Variables
-      env:
-        OUTPUT1: ${{ needs.build.outputs.resource_group_name }}
-      run: |
-        echo "$OUTPUT1"
+  #  steps:
+  #  - name: Verify Environment Variables
+  #    env:
+  #      OUTPUT1: ${{ needs.build.outputs.resource_group_name }}
+  #    run: |
+  #      echo "$OUTPUT1"
         
 
-    - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #  - name: Login to Azure
+  #    uses: azure/login@v1
+  #    with:
+  #      creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Create Azure Web App
       run: |
         az webapp create \
-          --resource-group ${{ needs.build.outputs.resource_group_name }} \
+          --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
           --plan ${{ env.APP_SERVICE_PLAN }} \
           --name ${{ env.APP_SERVICE_NAME }} \
           --deployment-container-image-name ${{ env.REGISTRY_LOGIN_SERVER }}/flask-app:latest   

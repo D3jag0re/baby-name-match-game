@@ -114,8 +114,11 @@ jobs:
 
     steps:
     - name: Verify Environment Variables
+      env:
+        OUTPUT1: ${{ needs.build.outputs.resource_group_name }}
       run: |
-        echo ${{ needs.build.outputs.resource_group_name }}      
+        echo "$OUTPUT1"
+        
 
     - name: Login to Azure
       uses: azure/login@v1

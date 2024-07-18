@@ -4,7 +4,7 @@
 
 The Baby Name Match Game is a web application that allows two users to independently select their preferences ("yes", "maybe", "no") for a list of baby names. At the end of the selection process, the application displays the names that both users selected as "yes" or "maybe".
 
-This is a simple app created to demonstrate automated deployments and CI/CD. 
+This is a simple app created to demonstrate automated deployments and CI/CD with containers. 
 
 ## Workflow of the App
 
@@ -26,6 +26,7 @@ This is a simple app created to demonstrate automated deployments and CI/CD.
 
 
 ## To Run Locally (without container) for Testing: 
+If you just want to see the app itself work.
 
 1. Clone the repository:
 
@@ -38,7 +39,7 @@ This is a simple app created to demonstrate automated deployments and CI/CD.
 
     ```bash
     python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    source venv/bin/activate  # On Windows: .venv\Scripts\activate
     ```
 
 3. Install dependencies:
@@ -71,13 +72,51 @@ This is a simple app created to demonstrate automated deployments and CI/CD.
 
 6. Open your browser and navigate to http://127.0.0.1:5000/ 
 
+
+
+## Build and Run the Docker Container Locally: 
+If you just want to see the app itself work.
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/D3jag0re/baby-name-match-game.git
+    cd <your_repository>
+    ```
+
+2. Build the docker image:
+
+    ```bash
+    docker build -t flask-app .
+    ```
+
+3. Run the Docker Container:
+
+    ```bash
+    docker run -p 8000:8000 flask-app
+    ```
+
+4. Verify Container is running:
+
+    ```bash
+    docker ps
+    ```
+
+5. Access the Flask application:
+
+    ```bash
+   http://localhost:8000
+    ```
+
+
 ## To Deploy to Azure 
 
 ### Prerequisites
 
-* Azure account
+* Azure Account
 * Azure CLI installed
 * Terraform installed
+* Azure Service Principal (See below for setup details)
 
 ### Steps
 

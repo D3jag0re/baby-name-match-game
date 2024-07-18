@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs: 
+      RESOURCE_GROUP_NAME: ${{ steps.outputs.outputs.RESOURCE_GROUP_NAME}}
+      
 
     steps:
     - name: Checkout code
@@ -81,16 +84,7 @@ jobs:
         echo "STORAGE_CONTAINER_NAME is $STORAGE_CONTAINER_NAME"
         echo "RESOURCE_GROUP_NAME is $RESOURCE_GROUP_NAME"
         echo "APP_SERVICE_PLAN is $APP_SERVICE_PLAN"
-        echo "REGISTRY_LOGIN_SERVER is $REGISTRY_LOGIN_SERVER"
-
-    - name: Output... Outputs
-      run: |
-        echo "STORAGE_ACCOUNT_NAME=${{ steps.outputs.outputs.storage_account_name }}"
-        echo "STORAGE_CONTAINER_NAME=${{ steps.outputs.outputs.storage_container_name }}"
-        echo "APP_SERVICE_NAME=${{ steps.outputs.outputs.app_service_name }}"
-        echo "RESOURCE_GROUP_NAME=${{ steps.outputs.outputs.resource_group_name }}"
-        echo "APP_SERVICE_PLAN=${{ steps.outputs.outputs.app_service_plan }}"
-        echo "REGISTRY_LOGIN_SERVER=${{ steps.outputs.outputs.registry_login_server }}"        
+        echo "REGISTRY_LOGIN_SERVER is $REGISTRY_LOGIN_SERVER"    
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -119,6 +113,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Verify Environment Variables
+      run: |
+        echo ${{ needs.build.outputs.resource_group_name }}      
+
     - name: Login to Azure
       uses: azure/login@v1
       with:
@@ -127,7 +125,7 @@ jobs:
     - name: Create Azure Web App
       run: |
         az webapp create \
-          --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+          --resource-group ${{ needs.build.outputs.resource_group_name }} \
           --plan ${{ env.APP_SERVICE_PLAN }} \
           --name ${{ env.APP_SERVICE_NAME }} \
           --deployment-container-image-name ${{ env.REGISTRY_LOGIN_SERVER }}/flask-app:latest   

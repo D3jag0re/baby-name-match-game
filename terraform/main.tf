@@ -54,7 +54,7 @@ module "container_registry" {
 ########################################
 
 # This allows the app service to pull the image from container registry 
-resource "azurerm_role_assignment" "kv_secret" {
+resource "azurerm_role_assignment" "app_service_registry" {
   scope                = module.container_registry.container_registry_id
   role_definition_name = "AcrPull"
   principal_id         = module.app_service_linux.app_service_managed_identity_principal_id

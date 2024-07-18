@@ -5,5 +5,7 @@ ASP
 APPSRV
 Storage Acc/ Container / Blob 
 
-For deloy to app service step:  WARNING: This command has been deprecated and will be removed in a future release. Use 'az webapp deploy' instead.
+Need to re-do documentation for containers 
+
+Add user access admin role for service principal with conditions 
 
